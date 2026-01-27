@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGamificationStore } from '../../store/GamificationStore';
-import GlassCard from '../GlassCard';
 
 const TimerDisplay = () => {
-    const { timeLeft, status, startSession, completeSession, startBreak } = useGamificationStore();
+    const { timeLeft, status, startSession, startBreak } = useGamificationStore();
+    const [isHovered, setIsHovered] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
 
     const formatTime = (seconds) => {
         const m = Math.floor(seconds / 60);
@@ -16,7 +17,6 @@ const TimerDisplay = () => {
             startSession({ category: 'Focus' }); // Default task for now
         } else if (status === 'work') {
             // Maybe pause? For now just let it run or complete early for debugging
-            // completeSession(); 
         } else if (status === 'completed') {
             startBreak();
         } else if (status === 'break') {
@@ -35,6 +35,8 @@ const TimerDisplay = () => {
         }
     };
 
+    const isActive = isHovered || isFocused;
+
     return (
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', zIndex: 10 }}>
             {/* Huge Timer */}
@@ -51,21 +53,25 @@ const TimerDisplay = () => {
 
             <button
                 onClick={handleAction}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
                 style={{
-                    background: 'none',
-                    border: '1px solid var(--glass-border)',
+                    background: isActive ? 'rgba(255,255,255,0.1)' : 'none',
+                    border: isFocused ? '1px solid var(--color-focus)' : '1px solid var(--glass-border)',
                     color: 'var(--color-text)',
                     padding: '12px 32px',
                     borderRadius: '30px',
                     fontSize: '1rem',
-                    letterSpacing: '2px',
+                    letterSpacing: isActive ? '4px' : '2px',
                     cursor: 'pointer',
                     marginTop: '20px',
                     backdropFilter: 'blur(4px)',
-                    transition: 'all 0.3s ease'
+                    transition: 'all 0.3s ease',
+                    outline: 'none',
+                    boxShadow: isFocused ? '0 0 20px rgba(47, 128, 237, 0.5)' : 'none'
                 }}
-                onMouseEnter={(e) => { e.target.style.background = 'rgba(255,255,255,0.1)'; e.target.style.letterSpacing = '4px'; }}
-                onMouseLeave={(e) => { e.target.style.background = 'none'; e.target.style.letterSpacing = '2px'; }}
             >
                 {getButtonText()}
             </button>
