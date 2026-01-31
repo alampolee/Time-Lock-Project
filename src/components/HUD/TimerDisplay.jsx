@@ -3,7 +3,7 @@ import { useGamificationStore } from '../../store/GamificationStore';
 import GlassCard from '../GlassCard';
 
 const TimerDisplay = () => {
-    const { timeLeft, status, startSession, completeSession, startBreak } = useGamificationStore();
+    const { timeLeft, status, startSession, startBreak } = useGamificationStore();
 
     const formatTime = (seconds) => {
         const m = Math.floor(seconds / 60);
@@ -16,7 +16,7 @@ const TimerDisplay = () => {
             startSession({ category: 'Focus' }); // Default task for now
         } else if (status === 'work') {
             // Maybe pause? For now just let it run or complete early for debugging
-            // completeSession(); 
+            // completeSession();
         } else if (status === 'completed') {
             startBreak();
         } else if (status === 'break') {
@@ -66,6 +66,8 @@ const TimerDisplay = () => {
                 }}
                 onMouseEnter={(e) => { e.target.style.background = 'rgba(255,255,255,0.1)'; e.target.style.letterSpacing = '4px'; }}
                 onMouseLeave={(e) => { e.target.style.background = 'none'; e.target.style.letterSpacing = '2px'; }}
+                onFocus={(e) => { e.target.style.background = 'rgba(255,255,255,0.1)'; e.target.style.letterSpacing = '4px'; }}
+                onBlur={(e) => { e.target.style.background = 'none'; e.target.style.letterSpacing = '2px'; }}
             >
                 {getButtonText()}
             </button>
