@@ -1,9 +1,9 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 
 const GlassCard = ({ children, className = '', style = {}, ...props }) => {
     return (
-        <motion.div
+        <Motion.div
             className={`glass-card ${className}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -21,7 +21,7 @@ const GlassCard = ({ children, className = '', style = {}, ...props }) => {
             {...props}
         >
             {children}
-        </motion.div>
+        </Motion.div>
     );
 };
 

@@ -1,11 +1,8 @@
 import React, { Suspense } from 'react';
 import Scene from './components/Scene/Scene';
 import HUD from './components/HUD/HUD';
-import { useGamificationStore } from './store/GamificationStore';
 
 function App() {
-  const { status } = useGamificationStore();
-
   return (
     <main style={{ position: 'relative', width: '100%', height: '100%' }}>
       <Suspense fallback={
