@@ -33,7 +33,7 @@ export const useGamificationStore = create(
             },
 
             tick: () => {
-                const { timeLeft, status, mode } = get();
+                const { timeLeft, status } = get();
                 if (status !== 'work' && status !== 'break') return;
 
                 if (timeLeft > 0) {

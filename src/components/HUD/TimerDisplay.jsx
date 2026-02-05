@@ -1,9 +1,9 @@
 import React from 'react';
 import { useGamificationStore } from '../../store/GamificationStore';
-import GlassCard from '../GlassCard';
+import { motion as Motion } from 'framer-motion';
 
 const TimerDisplay = () => {
-    const { timeLeft, status, startSession, completeSession, startBreak } = useGamificationStore();
+    const { timeLeft, status, startSession, startBreak } = useGamificationStore();
 
     const formatTime = (seconds) => {
         const m = Math.floor(seconds / 60);
@@ -16,7 +16,7 @@ const TimerDisplay = () => {
             startSession({ category: 'Focus' }); // Default task for now
         } else if (status === 'work') {
             // Maybe pause? For now just let it run or complete early for debugging
-            // completeSession(); 
+            // completeSession();
         } else if (status === 'completed') {
             startBreak();
         } else if (status === 'break') {
@@ -49,8 +49,20 @@ const TimerDisplay = () => {
                 {formatTime(timeLeft)}
             </h1>
 
-            <button
+            <Motion.button
                 onClick={handleAction}
+                initial={{ letterSpacing: '2px', backgroundColor: 'rgba(255,255,255,0)' }}
+                whileHover={{
+                    scale: 1.05,
+                    backgroundColor: 'rgba(255,255,255,0.1)',
+                    letterSpacing: '4px'
+                }}
+                whileTap={{ scale: 0.95 }}
+                whileFocus={{
+                    scale: 1.05,
+                    borderColor: 'var(--color-focus)',
+                    boxShadow: '0 0 15px var(--color-focus)'
+                }}
                 style={{
                     background: 'none',
                     border: '1px solid var(--glass-border)',
@@ -58,17 +70,14 @@ const TimerDisplay = () => {
                     padding: '12px 32px',
                     borderRadius: '30px',
                     fontSize: '1rem',
-                    letterSpacing: '2px',
                     cursor: 'pointer',
                     marginTop: '20px',
-                    backdropFilter: 'blur(4px)',
-                    transition: 'all 0.3s ease'
+                    backdropFilter: 'blur(4px)'
                 }}
-                onMouseEnter={(e) => { e.target.style.background = 'rgba(255,255,255,0.1)'; e.target.style.letterSpacing = '4px'; }}
-                onMouseLeave={(e) => { e.target.style.background = 'none'; e.target.style.letterSpacing = '2px'; }}
+                aria-label={getButtonText()}
             >
                 {getButtonText()}
-            </button>
+            </Motion.button>
         </div>
     );
 };
