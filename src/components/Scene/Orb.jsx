@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { MeshDistortMaterial, Sphere } from '@react-three/drei';
 import * as THREE from 'three';
@@ -7,7 +7,7 @@ import { useGamificationStore } from '../../store/GamificationStore';
 const Orb = () => {
     const mesh = useRef();
     const material = useRef();
-    const { status, mode } = useGamificationStore();
+    const { status } = useGamificationStore();
 
     // Target values for animation
     const targetScale = useRef(1);
@@ -31,7 +31,6 @@ const Orb = () => {
             targetColor.current.set('#2F80ED'); // Electric Blue
 
             // Subtle pulse based on time?
-            const time = state.clock.getElapsedTime();
             mesh.current.rotation.y += delta * 0.5;
         } else if (status === 'break') {
             targetScale.current = 1.3; // Expand

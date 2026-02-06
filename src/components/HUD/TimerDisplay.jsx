@@ -1,9 +1,9 @@
 import React from 'react';
+import { motion as Motion } from 'framer-motion';
 import { useGamificationStore } from '../../store/GamificationStore';
-import GlassCard from '../GlassCard';
 
 const TimerDisplay = () => {
-    const { timeLeft, status, startSession, completeSession, startBreak } = useGamificationStore();
+    const { timeLeft, status, startSession, startBreak } = useGamificationStore();
 
     const formatTime = (seconds) => {
         const m = Math.floor(seconds / 60);
@@ -16,7 +16,7 @@ const TimerDisplay = () => {
             startSession({ category: 'Focus' }); // Default task for now
         } else if (status === 'work') {
             // Maybe pause? For now just let it run or complete early for debugging
-            // completeSession(); 
+            // completeSession();
         } else if (status === 'completed') {
             startBreak();
         } else if (status === 'break') {
@@ -35,6 +35,16 @@ const TimerDisplay = () => {
         }
     };
 
+    const getAriaLabel = () => {
+         switch (status) {
+            case 'idle': return 'Start Focus Session';
+            case 'work': return 'Focus Session In Progress';
+            case 'completed': return 'Take a Break';
+            case 'break': return 'Return to Focus';
+            default: return 'Start Timer';
+        }
+    }
+
     return (
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', zIndex: 10 }}>
             {/* Huge Timer */}
@@ -49,8 +59,24 @@ const TimerDisplay = () => {
                 {formatTime(timeLeft)}
             </h1>
 
-            <button
+            <Motion.button
                 onClick={handleAction}
+                aria-label={getAriaLabel()}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                whileHover={{
+                    scale: 1.05,
+                    backgroundColor: 'rgba(255,255,255,0.1)',
+                    letterSpacing: '4px',
+                    borderColor: 'var(--color-focus)'
+                }}
+                whileTap={{ scale: 0.95 }}
+                whileFocus={{
+                    scale: 1.05,
+                    borderColor: 'var(--color-focus)',
+                    boxShadow: '0 0 0 4px rgba(47, 128, 237, 0.2)'
+                }}
                 style={{
                     background: 'none',
                     border: '1px solid var(--glass-border)',
@@ -62,13 +88,11 @@ const TimerDisplay = () => {
                     cursor: 'pointer',
                     marginTop: '20px',
                     backdropFilter: 'blur(4px)',
-                    transition: 'all 0.3s ease'
+                    outline: 'none' // Handled by whileFocus
                 }}
-                onMouseEnter={(e) => { e.target.style.background = 'rgba(255,255,255,0.1)'; e.target.style.letterSpacing = '4px'; }}
-                onMouseLeave={(e) => { e.target.style.background = 'none'; e.target.style.letterSpacing = '2px'; }}
             >
                 {getButtonText()}
-            </button>
+            </Motion.button>
         </div>
     );
 };
