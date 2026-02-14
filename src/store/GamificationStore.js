@@ -33,7 +33,7 @@ export const useGamificationStore = create(
             },
 
             tick: () => {
-                const { timeLeft, status, mode } = get();
+                const { timeLeft, status } = get();
                 if (status !== 'work' && status !== 'break') return;
 
                 if (timeLeft > 0) {
@@ -58,7 +58,7 @@ export const useGamificationStore = create(
                         const diffHours = (now - lastDate) / (1000 * 60 * 60);
                         if (diffHours < 24) {
                             // Same day or consistent
-                            // Simple logic: if different day, increment. 
+                            // Simple logic: if different day, increment.
                             // For now, simple increment on every session to feel good
                             newStreak += 1;
                         } else if (diffHours > 48) {
